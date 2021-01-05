@@ -31,7 +31,7 @@ const Theater = ({currentUser,seats,updateMove}) => {
           * Show user profile pic/name after login
           */}
         {/* <a href='javascript:;' onClick={() => firebase.auth().signOut()}>Logout</a> */}
-        <div className='pointer' onClick={() => auth.signOut()} >Logout</div>
+        <div className='pointer' onClick={() => (auth.signOut(),history.push('/'))} >Logout</div>
       </div>
       <div className='rt-rooms'>
         {/**
@@ -39,24 +39,18 @@ const Theater = ({currentUser,seats,updateMove}) => {
           */
          tables.map( 
           table => 
-          <div key={x++} className='rt-room' style={{width: table.width, height: table.height, top: table.y, left: table.x}}>
+          <div onClick={ () => updateMove(currentUser,table.id)} key={x++} className='rt-room' style={{width: table.width, height: table.height, top: table.y, left: table.x}}>
             
               {
               table.seats.map(
                 seat => 
-                  <div key={x++}  >
-                    {
-                      <img onClick={ () => updateMove(currentUser,table.id,seat)} 
+                      <img  key={x++}
                       src={
                         (seats.find( tableSeats => tableSeats.seats.find(seat => seat.occupide)) === undefined ) ? 
                         '': (seats.find( tableSeats => tableSeats.seats.find(seat => seat.occupide)).seats.find(elem => elem.seat.x === seat.x && elem.seat.y === seat.y)) ? 
                         seats.find( tableSeats => tableSeats.seats.find(seat => seat.occupide)).seats.find(elem => elem.seat.x === seat.x && elem.seat.y === seat.y).user.photoURL : '' 
                       } 
                         alt='seat' className='rt_room' style={{position: 'absolute', width: 50, height: 50, top: seat.y, left: seat.x  }}/>
-                    }
-                  </div>
-                
-                  
               )}
             
             <div className='rt-room-name'>{table.id}</div>
