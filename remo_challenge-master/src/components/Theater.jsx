@@ -9,9 +9,9 @@ import Firebase from '../services/firebase'
 import { setCurrentUserSeat } from 'reducers/data.action';
 
 const Theater = ({currentUser,seats,setCurrentUserSeat}) => {
-  const firstTable = TableConfig.tables[0];
+  //const firstTable = TableConfig.tables[0];
   const tables = TableConfig.tables;
-  const history = useHistory()
+  //const history = useHistory()
   const auth = Firebase.auth()
   let x = 0
 

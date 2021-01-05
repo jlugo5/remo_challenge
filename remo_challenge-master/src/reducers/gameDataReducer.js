@@ -9,12 +9,15 @@ export default (state = {}, action ) => {
             }
         case 'ADD_USER_TO_SEAT':
             return {
-                seats: [...state.seats,action.payload]
+                seats: addUserToSeat(state.seats,action.payload)
             }
         case 'UPDATE_MOVE':
-            return state
+            //console.log(action.payload)
+            return {
+                //seats: moveSeat(state.seats,action.payload)
+            }
         default:
-            return state
+            return state = initialState()
     }
 }
 

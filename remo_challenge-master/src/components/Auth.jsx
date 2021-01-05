@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Firebase from '../services/firebase';
 import { useHistory } from 'react-router-dom';
-import { sendGetRequest, sendPostRequest } from '../apis';
+//import { sendGetRequest, sendPostRequest } from '../apis';
 
 import { connect } from 'react-redux'
 import { setCurrentUser } from '../reducers/user.action'
