@@ -6,12 +6,12 @@ import TableConfig from './tableConfig.json';
 import {connect} from 'react-redux'
 import { useHistory } from 'react-router-dom';
 import Firebase from '../services/firebase'
-import { setCurrentUserSeat } from 'reducers/data.action';
+import { updateMove } from 'reducers/data.action';
 
-const Theater = ({currentUser,seats,setCurrentUserSeat}) => {
-  //const firstTable = TableConfig.tables[0];
+const Theater = ({currentUser,seats,updateMove}) => {
+  const firstTable = TableConfig.tables[0];
   const tables = TableConfig.tables;
-  //const history = useHistory()
+  const history = useHistory()
   const auth = Firebase.auth()
   let x = 0
 
@@ -21,6 +21,8 @@ const Theater = ({currentUser,seats,setCurrentUserSeat}) => {
       <div className='rt-app-bar'>
         {
           console.log(seats)
+          // console.log(seats.find( tableSeats => tableSeats.seats.find(seat => seat.occupide))
+          // .seats.find(seat => seat.occupide).user.photoURL)
           // console.log(seats.find( elem => elem.seat.x > elem.seat.y).user.photoURL)
         }
         <img src={currentUser.photoURL} alt="user"/>
@@ -33,7 +35,7 @@ const Theater = ({currentUser,seats,setCurrentUserSeat}) => {
       </div>
       <div className='rt-rooms'>
         {/**
-          * Create rooms here as in the requirement and make sure it is aligned with background Hi
+          * Create rooms here as in the requirement and make sure it is aligned with background
           */
          tables.map( 
           table => 
@@ -44,10 +46,11 @@ const Theater = ({currentUser,seats,setCurrentUserSeat}) => {
                 seat => 
                   <div key={x++}  >
                     {
-                      <img  
-                      src={(seats.find( elem => (elem.x === seat.x && elem.y === seat.y)) === undefined ) ? 
-                        '': (seats.find( elem => (elem.x === seat.x && elem.y === seat.y))) ? 
-                        seats.find( elem => (elem.x === seat.x && elem.y === seat.y)).user.photoURL : '' 
+                      <img onClick={ () => updateMove(currentUser,table.id,seat)} 
+                      src={
+                        (seats.find( tableSeats => tableSeats.seats.find(seat => seat.occupide)) === undefined ) ? 
+                        '': (seats.find( tableSeats => tableSeats.seats.find(seat => seat.occupide)).seats.find(elem => elem.seat.x === seat.x && elem.seat.y === seat.y)) ? 
+                        seats.find( tableSeats => tableSeats.seats.find(seat => seat.occupide)).seats.find(elem => elem.seat.x === seat.x && elem.seat.y === seat.y).user.photoURL : '' 
                       } 
                         alt='seat' className='rt_room' style={{position: 'absolute', width: 50, height: 50, top: seat.y, left: seat.x  }}/>
                     }
@@ -78,7 +81,7 @@ const mapStateToProps = ({user,data}) => (
 
 const mapDispatchToProps = dispatch => (
   {
-    setCurrentUserSeat: (user,table,x,y) => dispatch(setCurrentUserSeat(user,table,x,y)) 
+    updateMove: (user,table,seat) => dispatch(updateMove(user,table,seat))
   }
 )
 

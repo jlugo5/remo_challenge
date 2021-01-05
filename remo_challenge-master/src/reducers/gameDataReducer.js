@@ -1,3 +1,4 @@
+
 import TableConfig from '../components/tableConfig.json';
 
 export default (state = {}, action ) => {
@@ -12,9 +13,9 @@ export default (state = {}, action ) => {
                 seats: addUserToSeat(state.seats,action.payload)
             }
         case 'UPDATE_MOVE':
-            //console.log(action.payload)
+            console.log(action.payload)
             return {
-                //seats: moveSeat(state.seats,action.payload)
+                seats: moveSeat(state.seats,action.payload)
             }
         default:
             return state = initialState()
@@ -45,4 +46,38 @@ const addUserToSeat = (tables,user) => {
         
         )     
     }
+}
+
+const moveSeat = (tables,payload) => {
+    const {user,table} = payload
+    console.log(tables)
+    console.log(payload)
+    const userExist = tables.find( table => table.seats.find( seat => seat.user === user))
+    console.log(table)
+    console.log(tables.find( table => table.tableId === table))
+    const avaibleSeat = tables.find( table => table.tableId === table).seats.find( seat => !seat.occupide)
+
+    const newTables = tables.map(
+        table => (
+            (table.tableId === table)?
+            {...table,qtySeats: table.qtySeats - 1, seats: table.seats.map( seat => 
+                (seat.seat === avaibleSeat.seat)?
+                {...seat,user, occupide: !seat.occupide}
+                : seat
+                )
+            }
+            :table
+        )
+    )
+
+    if(userExist){
+        return newTables.map(
+            table =>(
+                (table.TableId === userExist.tableId)?
+                {...table,qtySeats: table.qtySeats + 1, seats: table.seats.filter(seat => seat.user !== user)}
+                : table
+            )
+        )
+    }
+
 }

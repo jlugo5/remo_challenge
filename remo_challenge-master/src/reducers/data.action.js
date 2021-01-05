@@ -11,3 +11,10 @@ export const addUserToSeat = (user) => (
         payload: user
     }
 )
+
+export const updateMove = (user,table) => (
+    {
+        type: 'UPDATE_MOVE',
+        payload: {user,table}
+    }
+)

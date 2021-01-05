@@ -1,14 +1,16 @@
 .remo-theater{
-  margin-left: -378px;
-  margin-top: -300px;
+  margin-left: 0px;
+  margin-top: 0px;
 
   .rt-app-bar {
     text-align: right;
     padding: 1rem;
-    position: fixed;
+    position: absolute;
     z-index: 1;
-    width: 100%;
+    width: 100px;
     box-sizing: border-box;
+    top: 100px;
+    left: 600;
   }
 
   .rt-rooms {
@@ -39,4 +41,7 @@
       object-fit: cover;
     }
   }
+}
+.pointer{
+  cursor: pointer;
 }

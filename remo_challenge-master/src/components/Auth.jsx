@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import Firebase from '../services/firebase';
 import { useHistory } from 'react-router-dom';
-//import { sendGetRequest, sendPostRequest } from '../apis';
+import { sendGetRequest, sendPostRequest } from '../apis';
 
 import { connect } from 'react-redux'
 import { setCurrentUser } from '../reducers/user.action'
-import { setCurrentUserSeat } from 'reducers/data.action';
+import { addUserToSeat, setCurrentUserSeat } from 'reducers/data.action';
 
-const Auth = ({setCurrentUser,setCurrentUserSeat}) => {
+const Auth = ({setCurrentUser,setCurrentUserSeat,addUserToSeat}) => {
   const history = useHistory();
 
   useEffect(() => {
@@ -15,7 +15,9 @@ const Auth = ({setCurrentUser,setCurrentUserSeat}) => {
       if (user) {
         // TODO: Store user details
         setCurrentUser(user)
-        setCurrentUserSeat(user,'first-table', 91.92, 5.68)
+        //setCurrentUserSeat(user,'first-table', 91.92, 5.68)
+        addUserToSeat(user)
+
         history.push('/theater');
       }
     });
@@ -54,7 +56,8 @@ const mapStateToProps = ({data}) => (
 const mapDispatchToProps = dispatch => (
   {
     setCurrentUser: user => dispatch(setCurrentUser(user)),
-    setCurrentUserSeat: (user,table,x,y) => dispatch(setCurrentUserSeat(user,table,x,y))
+    setCurrentUserSeat: (user,table,x,y) => dispatch(setCurrentUserSeat(user,table,x,y)),
+    addUserToSeat: (user) => dispatch(addUserToSeat(user))
   }
 )
  
