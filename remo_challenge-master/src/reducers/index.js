@@ -1,8 +1,20 @@
 
-import { combineReducers } from "redux";
 
+import { combineReducers } from "redux";
 import data from "./gameDataReducer";
 
-export default combineReducers({
-  data
-});
+import userReducer from "./user.reducer";
+import { persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+
+const persistConfig = {
+  key:'root',
+  storage: storage,
+  whitelist: ['user','data']
+}
+
+export default persistReducer(persistConfig, combineReducers({
+    data,
+    user: userReducer
+  })
+)
