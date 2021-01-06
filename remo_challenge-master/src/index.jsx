@@ -7,12 +7,17 @@ import './index.scss';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import reducers from './reducers';
+import { PersistGate } from 'redux-persist/integration/react'
+import {persistStore} from 'redux-persist'
 
 const store = createStore(reducers, {});
+const persistor = persistStore(store)
 
 ReactDOM.render(
   <Provider store={store}>
-     <App />
+    <PersistGate persistor={persistor}>
+      <App />
+    </PersistGate>
   </Provider>
     ,
   document.getElementById('root')

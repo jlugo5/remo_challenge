@@ -10,7 +10,7 @@ export default (state = {}, action ) => {
             }
         case 'ADD_USER_TO_SEAT':
             return {
-                seats: addUserToSeat(state.seats,action.payload)
+                seats: addUserToSeat(state,action.payload)
             }
         case 'UPDATE_MOVE':
             console.log(action.payload)
@@ -28,12 +28,15 @@ const initialState = () => {
     return {seats: tables.map( table => ({tableId: table.id, qtySeats: 6, seats: table.seats.map( seat => ({user:{}, seat, occupide: false}))}))}
 }
 
-const addUserToSeat = (tables,user) => {
-    const initialTable = tables.find( table => table.qtySeats > 4)
+const addUserToSeat = (state,user, seatsNum=4) => {
+    const {seats} = state
+    const initialTable = seats.find( table => table.qtySeats > seatsNum)
     const initialSeat = initialTable.seats.find( seat => !seat.occupide)
-
+    
+    console.log(initialTable)
+    console.log(user)
     if(initialTable){
-        return tables.map( table =>  (
+        return seats.map( table =>  (
             (table.tableId === initialTable.tableId)?
             {...table,qtySeats: table.qtySeats - 1, seats: table.seats.map( seat => 
                 (seat.seat === initialSeat.seat)?
@@ -45,22 +48,23 @@ const addUserToSeat = (tables,user) => {
             )  
         
         )     
+    }else{
+        seatsNum -= 1
+        addUserToSeat(seats,user,seatsNum)
     }
 }
 
 const moveSeat = (tables,payload) => {
     const {user,table} = payload
-    console.log(tables)
-    console.log(payload)
     const userExist = tables.find( table => table.seats.find( seat => seat.user === user))
-    console.log(tables[0].tableId)
-    console.log(table)
-    console.log(tables.find( table1 => table1.tableId === table))
     const avaibleSeat = tables.find( table1 => table1.tableId === table).seats.find( seat => !seat.occupide)
+
+    if(userExist.tableId === table)
+        return tables
 
     const newTables = tables.map(
         table1 => (
-            (table1.tableId === table)?
+            (table1.tableId === table && table1.qtySeats > 0)?
             {...table1,qtySeats: table1.qtySeats - 1, seats: table1.seats.map( seat => 
                 (seat.seat === avaibleSeat.seat)?
                 {...seat,user, occupide: !seat.occupide}
@@ -70,10 +74,8 @@ const moveSeat = (tables,payload) => {
             :table1
         )
     )
-    console.log(newTables[0].seats[0].user)
-    //console.log(userExist.seats.find(seat => seat.user === user))
+
     const userSeat = userExist.seats.find(seat => seat.user === user)
-    //console.log(userSeat.user)
     if(userExist){
         return newTables.map(
             table =>(

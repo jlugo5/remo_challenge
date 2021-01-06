@@ -6,9 +6,9 @@ import TableConfig from './tableConfig.json';
 import {connect} from 'react-redux'
 import { useHistory } from 'react-router-dom';
 import Firebase from '../services/firebase'
-import { updateMove } from 'reducers/data.action';
+import { addUserToSeat, updateMove } from 'reducers/data.action';
 
-const Theater = ({currentUser,seats,updateMove}) => {
+const Theater = ({currentUser,seats,updateMove,addUserToSeat}) => {
   const firstTable = TableConfig.tables[0];
   const tables = TableConfig.tables;
   const history = useHistory()
@@ -17,21 +17,20 @@ const Theater = ({currentUser,seats,updateMove}) => {
 
 
   return ( 
-    <div className='remo-theater' style={{width: TableConfig.width, height: TableConfig.height}}>
+    <div className='remo-theater' style={{width: 1000, height: 800}}>
       <div className='rt-app-bar'>
         {
           console.log(seats)
-          // console.log(seats.find( tableSeats => tableSeats.seats.find(seat => seat.occupide))
-          // .seats.find(seat => seat.occupide).user.photoURL)
-          // console.log(seats.find( elem => elem.seat.x > elem.seat.y).user.photoURL)
         }
-        <img src={currentUser.photoURL} alt="user"/>
-        <span>{currentUser.displayName}</span>
+        
         {/**
           * Show user profile pic/name after login
           */}
         {/* <a href='javascript:;' onClick={() => firebase.auth().signOut()}>Logout</a> */}
+        <img src={currentUser.photoURL} alt="user"/>
+        <span>{currentUser.displayName}</span>
         <div className='pointer' onClick={() => (auth.signOut(),history.push('/'))} >Logout</div>
+        {/* <div className='pointer' onClick={() => addUserToSeat(currentUser)} >Add Users</div> */}
       </div>
       <div className='rt-rooms'>
         {/**
@@ -75,7 +74,8 @@ const mapStateToProps = ({user,data}) => (
 
 const mapDispatchToProps = dispatch => (
   {
-    updateMove: (user,table,seat) => dispatch(updateMove(user,table,seat))
+    updateMove: (user,table,seat) => dispatch(updateMove(user,table,seat)),
+    addUserToSeat: (user) => dispatch(addUserToSeat(user))
   }
 )
 
